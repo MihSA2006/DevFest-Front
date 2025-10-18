@@ -5,12 +5,39 @@ import React, { useState } from 'react'
 import bgAnimale from '../../assets/bg-animal.png'
 import { BiCheckCircle } from "react-icons/bi";
 import { BsCircle } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const Steps3 = () => {
-  const [elevageType, setElevageType] = useState('')
-  const [ressourceType, setRessourceType] = useState('')
-  const [autreElevage, setAutreElevage] = useState('')
-  const [autreRessource, setAutreRessource] = useState('')
+
+
+  const [elevageType, setElevageType] = useState('');
+  const [ressourceType, setRessourceType] = useState('');
+  const [autreElevage, setAutreElevage] = useState('');
+  const [autreRessource, setAutreRessource] = useState('');
+
+  const navigate = useNavigate(); // ✅ hook pour la redirection
+
+  // ✅ Fonction appelée au clic sur "Continuer"
+  const handleContinue = () => {
+    const quizAnswers = JSON.parse(localStorage.getItem('quizAnswers')) || [];
+
+    // Récupère les réponses actuelles
+    const elevageAnswer = elevageType === 'autre' ? autreElevage || 'Autre (non précisé)' : elevageType;
+    const ressourceAnswer = ressourceType === 'autreRessource' ? autreRessource || 'Autre (non précisé)' : ressourceType;
+
+    // ✅ Ajoute les nouvelles questions/réponses
+    const newAnswers = [
+      ...quizAnswers,
+      { question: "Quel élevage souhaitez-vous développer ?", answer: elevageAnswer },
+      { question: "Quelles ressources possédez-vous ?", answer: ressourceAnswer },
+    ];
+
+    // ✅ Sauvegarde dans le localStorage
+    localStorage.setItem('quizAnswers', JSON.stringify(newAnswers));
+
+    // ✅ Redirection vers /step4
+    navigate('/step4');
+  };
 
   return (
     <div
@@ -356,17 +383,15 @@ const Steps3 = () => {
                 </div>
               </div>
 
-              {/* Submit Button */}
-              <a href="/step4">
-                <button
-                  className='w-full mt-8 py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1'
-                  style={{ backgroundColor: '#4B8FA5' }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#1D373F'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#4B8FA5'}
-                >
-                  Continuer →
-                </button>
-              </a>
+              <button
+                onClick={handleContinue}
+                className='w-full mt-8 py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1'
+                style={{ backgroundColor: '#4B8FA5' }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#1D373F'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#4B8FA5'}
+              >
+                Continuer →
+              </button>
             </div>
           </div>
         </div>

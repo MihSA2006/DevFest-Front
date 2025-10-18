@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import bgAnimale from '../../assets/bg-animal.png'
 import { BiCheckCircle } from "react-icons/bi";
 import { BsCircle } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const Steps4 = () => {
     const [objectifType, setObjectifType] = useState('')
@@ -12,6 +13,32 @@ const Steps4 = () => {
     const [nombreType, setNombreType] = useState('')
     const [autreObjectif, setAutreObjectif] = useState('')
     const [autreBudget, setAutreBudget] = useState('')
+
+    const navigate = useNavigate(); // ✅ hook pour la redirection
+
+    // ✅ Fonction appelée au clic sur "Continuer"
+    const handleContinue = () => {
+        const quizAnswers = JSON.parse(localStorage.getItem('quizAnswers')) || [];
+
+        // Récupère les réponses actuelles
+        const objectifTypeAnswer = objectifType === 'autre' ? autreObjectif || 'Autre (non précisé)' : objectifType;
+        const nombreTypeAnswer = nombreType
+        const budgetTypeAnswer = budgetType === 'autre' ? autreBudget || 'Autre (non précisé)' : budgetType;
+
+        // ✅ Ajoute les nouvelles questions/réponses
+        const newAnswers = [
+            ...quizAnswers,
+            { question: "Quel est votre objectif principal ?", answer: objectifTypeAnswer },
+            { question: "Quel est votre budget initial ?", answer: budgetTypeAnswer },
+            { question: "Nombre d'animaux souhaité ?", answer: nombreTypeAnswer },
+        ];
+
+        // ✅ Sauvegarde dans le localStorage
+        localStorage.setItem('quizAnswers', JSON.stringify(newAnswers));
+
+
+        navigate('/step5');
+    };
 
     return (
         <div
@@ -96,7 +123,6 @@ const Steps4 = () => {
                                             <span className='flex-1 font-medium' style={{ color: '#1D373F' }}>
                                                 Créer un petit élevage familial
                                             </span>
-                                            <GiRooster className='text-3xl transition-transform duration-300 group-hover:scale-110' style={{ color: '#4B8FA5' }} />
                                         </label>
 
                                         <label
@@ -124,7 +150,6 @@ const Steps4 = () => {
                                             <span className='flex-1 font-medium' style={{ color: '#1D373F' }}>
                                                 Développer un élevage rentable
                                             </span>
-                                            <GiPig className='text-3xl transition-transform duration-300 group-hover:scale-110' style={{ color: '#4B8FA5' }} />
                                         </label>
 
                                         <label
@@ -415,17 +440,15 @@ const Steps4 = () => {
                                     </div>
                                 </div>
 
-                                {/* Submit Button */}
-                                <a href="/step5">
-                                    <button
-                                        className='w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1'
-                                        style={{ backgroundColor: '#4B8FA5' }}
-                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#1D373F'}
-                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#4B8FA5'}
-                                    >
-                                        Continuer →
-                                    </button>
-                                </a>
+                                <button
+                                    onClick={handleContinue}
+                                    className='w-full mt-8 py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1'
+                                    style={{ backgroundColor: '#4B8FA5' }}
+                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#1D373F'}
+                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#4B8FA5'}
+                                >
+                                    Continuer →
+                                </button>
                             </div>
                         </div>
                     </div>

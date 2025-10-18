@@ -1,12 +1,40 @@
-import { BsCircle } from "react-icons/bs"; 
-import { BiCheckCircle } from "react-icons/bi"; 
+import { BsCircle } from "react-icons/bs";
+import { BiCheckCircle } from "react-icons/bi";
 import React, { useState } from 'react'
 import bgAnimale from '../../assets/bg-animal.png'
+import { useNavigate } from "react-router-dom";
 
 const Steps5 = () => {
     const [ecoulementType, setEcoulementType] = useState('')
     const [budgetImprevuType, setBudgetImprevuType] = useState('')
     const [agrandirType, setAgrandirType] = useState('')
+
+    const navigate = useNavigate(); // ✅ hook pour la redirection
+
+    // ✅ Fonction appelée au clic sur "Continuer"
+    const handleContinue = () => {
+        const quizAnswers = JSON.parse(localStorage.getItem('quizAnswers')) || [];
+
+        // Récupère les réponses actuelles
+        const ecoulementTypeAnswer = ecoulementType;
+        const budgetImprevuTypeAnswer = budgetImprevuType
+        const agrandirTypeAnswer = agrandirType;
+
+        // ✅ Ajoute les nouvelles questions/réponses
+        const newAnswers = [
+            ...quizAnswers,
+            { question: "Avez-vous prévu comment écouler votre production ?", answer: ecoulementTypeAnswer },
+            { question: "Avez-vous prévu un budget pour les imprévus ?", answer: budgetImprevuTypeAnswer },
+            { question: "Comptez-vous agrandir votre élevage à l'avenir ?", answer: agrandirTypeAnswer },
+        ];
+
+        // ✅ Sauvegarde dans le localStorage
+        localStorage.setItem('quizAnswers', JSON.stringify(newAnswers));
+
+
+        navigate('/step-final');
+    };
+
 
     return (
         <div
@@ -33,12 +61,12 @@ const Steps5 = () => {
             </div>
 
             <div className='absolute top-1/3 left-10 flex flex-col gap-5 items-start'>
-                <BiCheckCircle className="size-9 text-green-600"/>
-                <BiCheckCircle className="size-9 text-green-600"/>
-                <BiCheckCircle className="size-9 text-green-600"/>
-                <BiCheckCircle className="size-9 text-green-600"/>
+                <BiCheckCircle className="size-9 text-green-600" />
+                <BiCheckCircle className="size-9 text-green-600" />
+                <BiCheckCircle className="size-9 text-green-600" />
+                <BiCheckCircle className="size-9 text-green-600" />
                 <div className="flex justify-center items-center gap-2">
-                    <BsCircle className="size-7 text-gray-600 ml-1"/>
+                    <BsCircle className="size-7 text-gray-600 ml-1" />
                     <span className="text-gray-400">5e Etape</span>
                 </div>
             </div>
@@ -302,12 +330,13 @@ const Steps5 = () => {
 
                                 {/* Submit Button */}
                                 <button
-                                    className='w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1'
+                                    onClick={handleContinue}
+                                    className='w-full mt-8 py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1'
                                     style={{ backgroundColor: '#4B8FA5' }}
                                     onMouseEnter={(e) => e.target.style.backgroundColor = '#1D373F'}
                                     onMouseLeave={(e) => e.target.style.backgroundColor = '#4B8FA5'}
                                 >
-                                    Voir mes recommandations →
+                                    Continuer →
                                 </button>
                             </div>
                         </div>

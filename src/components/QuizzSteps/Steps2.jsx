@@ -13,8 +13,11 @@ import aquaculture from '../../assets/aquaculture.jpg'
 import sylviculture from '../../assets/sylviculture.jpg'
 import { BsCircle } from "react-icons/bs";
 import { BiCheckCircle } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 const Steps2 = () => {
+
+    const navigate = useNavigate();
     const sectors = [
         {
             id: 1,
@@ -52,6 +55,24 @@ const Steps2 = () => {
             icon: "⛏️"
         }
     ]
+
+
+    const handleSelect = (sector) => {
+        const question = "Choix du Sous secteur";
+        const answer = sector.title;
+
+        // Récupérer l’ancien contenu (pour garder un historique)
+        const existingData = JSON.parse(localStorage.getItem("quizAnswers")) || [];
+
+        // Ajouter la nouvelle réponse
+        const updatedData = [...existingData, { question, answer }];
+
+        // Sauvegarder
+        localStorage.setItem("quizAnswers", JSON.stringify(updatedData));
+
+        // Aller à la prochaine étape
+        navigate("/step3");
+    };
 
     return (
         <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-12 flex flex-col justify-center items-center" style={{ height: '100vh', width: '100vw' }}>
@@ -121,7 +142,7 @@ const Steps2 = () => {
                                         </p>
                                     </div>
 
-                                    <a href="/step3">
+                                    {/* <a href="/step3"> */}
                                         <button
                                             className="w-full text-white px-3 py-2 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-xs mt-3"
                                             style={{
@@ -129,10 +150,11 @@ const Steps2 = () => {
                                             }}
                                             onMouseEnter={(e) => e.target.style.backgroundColor = '#1D373F'}
                                             onMouseLeave={(e) => e.target.style.backgroundColor = '#4B8FA5'}
+                                            onClick={() => handleSelect(sector)}
                                         >
                                             Sélectionner →
                                         </button>
-                                    </a>
+                                    {/* </a> */}
                                 </div>
 
                                 <div className="w-[50%] relative overflow-hidden">
